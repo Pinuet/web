@@ -1,0 +1,899 @@
+/* =
+   style.css
+   개인 포트폴리오 사이트 전체 스타일을 담은 파일입니다.
+   섹션이 많다보니 위에서부터 순서대로 "리셋 → 배경 → 네비게이션 →
+   히어로 → About → Skill → Career/Activity → Projects → 반응형" 순으로
+   정리했습니다.
+  */
+
+/* 
+   1. CSS 변수 (색상 팔레트)
+   같은 색을 여러 군데에서 반복해서 쓰다 보니, 나중에 색 하나만 바꾸고
+   싶어도 파일 전체를 뒤져야 해서 번거로웠습니다. 그래서 자주 쓰는 색을
+   변수로 미리 뽑아두고 필요한 곳마다 var(--이름)으로 가져다 썼습니다.
+ */
+:root {
+  --color-bg: #ffffff;         /* 전체 페이지 배경색 */
+  --color-light: #eeeeee;      /* 밝은 회색. 카드 배경이나 밝은 배경 위의 글자색으로 사용 */
+  --color-gray: #393e46;       /* 어두운 회색. 기본 글자색으로 가장 많이 사용 */
+  --color-point: #00adb5;      /* 청록색 포인트 컬러 (로고, 강조 텍스트 등) */
+  --color-timeline: #c84b31;   /* Career/Activity 타임라인에 쓰는 주황빛 색 */
+  --color-green: #00ff94;      /* 프로젝트 카드의 초록 계열 포인트. 태그/테두리처럼 배경으로 쓸 때만 사용 */
+  --color-green-text: #00875a; /* 위 초록을 더 진하게 만든 색. 흰 배경 위에 글자로 쓸 땐 이 색을 씁니다 */
+  --color-blue: #001aff;       /* 프로젝트 카드의 파란 계열 포인트. 색이 진해서 글자색으로도 그대로 사용 가능 */
+  --color-card-bg: #f4f4f4;    /* 프로젝트 카드 배경 (연한 회색) */
+  --color-project-bg: #ffffff; /* Projects 섹션 배경 */
+}
+
+/* 
+   2. 리셋(reset) 스타일
+   브라우저마다 h1, ul, button 같은 태그에 기본 여백/스타일이 조금씩
+   다르게 잡혀 있어서, 처음에 한 번 깨끗하게 초기화하고 시작합니다.
+ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* padding, border까지 너비 계산에 포함시켜서 크기 계산을 편하게 함 */
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+button {
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* 스크롤바를 안 보이게 숨김 (크롬/사파리 계열) */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  font-family: "Montserrat", sans-serif;
+  color: var(--color-gray);
+  scroll-behavior: smooth; /* 네비게이션 클릭 등으로 스크롤 이동할 때 부드럽게 움직이도록 함 */
+}
+
+body {
+  line-height: 1;
+  overflow-x: hidden; /* 요소가 화면 너비를 살짝 넘어가도 가로 스크롤바가 안 생기게 함 */
+  background-color: var(--color-bg);
+}
+
+/* flex로 가운데 정렬하는 걸 여기저기서 반복해서 써야 해서 클래스 하나로 빼뒀습니다 */
+.flex {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 그라데이션 글자 (청록 → 회색으로 이어지는 글자색) */
+.gradient-text {
+  background: linear-gradient(128.93deg, var(--color-point) 22.41%, var(--color-gray) 93.45%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 
+   3. 배경(별 애니메이션) 영역
+   화면 전체를 덮는 고정 레이어이고, 그 안에서 별처럼 보이는 점들이
+   위에서 아래로 계속 흘러내립니다.
+ */
+.background {
+  background-color: var(--color-bg);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1; /* 다른 콘텐츠보다 뒤로 보내기 */
+  top: 0;
+  left: 0;
+}
+
+
+/* 
+   4. 상단 고정 네비게이션 바
+   position: fixed로 화면 맨 위에 항상 붙어있게 하고, 다른 어떤 요소보다
+   위에 보이도록 z-index를 크게 줬습니다. 배경에 살짝 반투명 + blur를
+   줘서, 스크롤되는 내용 위에 떠 있어도 글자가 서로 안 겹쳐 보이게 했습니다.
+ */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.2rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid #e2e2e2;
+  z-index: 50;
+}
+.top-nav__logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-point);
+  text-decoration: none;
+}
+.top-nav__links {
+  display: flex;
+  gap: 2rem;
+}
+.top-nav__links a {
+  text-decoration: none;
+  color: var(--color-gray);
+  font-weight: 600;
+  font-size: 1rem;
+}
+.top-nav__links a:hover {
+  color: var(--color-point);
+}
+
+/* 
+   5. HERO 섹션 (첫 화면)
+ */
+.hero {
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 5rem 2rem 0; /* 위쪽 네비게이션 바에 이름 글자가 가리지 않도록 여백을 줌 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.hero__eyebrow {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-point);
+}
+.hero__name {
+  margin-top: 0.5rem;
+  /* 화면 폭에 따라 글자 크기가 2.6rem~5rem 사이에서 자동으로 바뀝니다.
+     고정 크기로 두면 좁은 화면에서 이름이 잘리거나 줄바꿈이 이상하게
+     될 수 있어서 clamp()로 최소/최대 크기를 정해줬습니다. */
+  font-size: clamp(2.6rem, 8vw, 5rem);
+  font-weight: 900;
+  color: var(--color-gray);
+  letter-spacing: 0.05em;
+}
+.hero__role {
+  margin-top: 1rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--color-gray);
+}
+.hero__scroll-cue {
+  margin-top: 4rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--color-gray);
+  animation: bounce-down 1.6s ease-in-out infinite;
+}
+.hero__scroll-cue svg {
+  fill: var(--color-gray);
+}
+/* 화살표가 위아래로 살짝 튕기면서 "여기 눌러서 내려가세요"라는 느낌을 줍니다 */
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(0.5rem); }
+}
+
+/* 
+   6. About 섹션 (자기소개)
+ */
+.page2-wrapper {
+  /* 안에 들어가는 소개 글이 꽤 길어서 높이를 고정해두면 잘리거나
+     다음 섹션과 겹치는 문제가 생겼습니다. 그래서 min-height로 최소
+     높이만 잡아주고, 내용이 많으면 자연스럽게 더 늘어나게 했습니다. */
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.page2-container {
+  border-radius: 2rem;
+  max-width: 1373px;
+  height: auto;
+  padding-top: 3rem;
+  padding-bottom: 2rem;
+  background-color: var(--color-light);
+  position: relative;
+  flex-direction: column;
+}
+
+/* 옆으로 흐르듯 지나가는 기술 슬라이더.
+   왼쪽 여백(4%)은 여기 .text-slider에 줍니다. .text-slider__slide에
+   주면 그 슬라이드의 containing block이 (화면 너비가 아니라) 4배 넓은
+   .text-slider__track이 되어버려서, 4%가 실제로는 화면 너비의 16%만큼
+   밀리는 문제가 있었습니다. */
+.text-slider {
+  width: 100%;
+  margin-top: -5rem;
+  padding-left: 4%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.text-slider__track {
+  width: 400%; /* 슬라이드가 4개라서 400%로 잡아줬습니다 */
+  display: flex;
+  animation: slide 20s infinite;
+}
+.text-slider__slide {
+  font-size: 4.5rem;
+  font-weight: 800;
+  width: 100%;
+}
+/* 슬라이드 하나가 잠깐 멈췄다가 옆으로 넘어가는 걸 반복하는 애니메이션입니다.
+   margin-left 값을 계단식으로 바꿔서 "멈춤 → 이동 → 멈춤"이 반복되게 했습니다.
+   지금 슬라이드가 4개라서, 전체 100% 구간을 25%씩 4등분해서 각 구간마다
+   "쭉 멈춰있다가 마지막에 한 칸(-100%) 이동"하는 걸 반복하게 만들었습니다.
+   (슬라이드 개수를 바꾸면 이 퍼센트 구간도 같이 다시 나눠줘야 합니다) */
+@keyframes slide {
+  0% { margin-left: 0; }
+  19% { margin-left: 0; }
+  25% { margin-left: -100%; }
+  44% { margin-left: -100%; }
+  50% { margin-left: -200%; }
+  69% { margin-left: -200%; }
+  75% { margin-left: -300%; }
+  94% { margin-left: -300%; }
+  100% { margin-left: 0; }
+}
+
+/* 슬라이더 아래에 있는 얇은 진행 표시 막대.
+   부모(.page2-container)가 align-items: center라서, 폭이 100%가 아닌
+   이 막대는 margin-left만 줘서는 "가운데 정렬 + 그만큼 더 밀림"이 되어
+   버립니다. align-self: flex-start로 가운데 정렬에서 빼내고, 그 상태에서
+   margin-left: 4%로 글자와 같은 위치에서 시작하도록 맞췄습니다. */
+.progress-bar {
+  position: relative;
+  height: 0.3rem;
+  width: 60%;
+  align-self: flex-start;
+  margin-left: 4%;
+}
+.progress-bar__fill {
+  height: 0.3rem;
+  background: linear-gradient(128.93deg, var(--color-point) 22.41%, var(--color-gray) 93.45%);
+  position: absolute;
+  /* 슬라이드 전체 주기 20s를 슬라이드 개수(4개)로 나눈 5초마다 한 번씩
+     차오르도록 맞췄습니다. 슬라이드 개수가 바뀌면 이 시간도 같이 바뀌어야
+     진행 막대가 다시 정확히 맞물립니다. */
+  animation: progress 5s infinite;
+}
+/* 글자가 멈춰있는 구간(한 슬라이드당 5초 중 76%인 3.8초 지점)에 딱 맞춰
+   막대가 다 차오르고, 그 다음 글자가 넘어가는 동안(나머지 24%)은 꽉 찬
+   상태로 유지되다가 다음 슬라이드가 시작할 때 같이 0으로 리셋됩니다. */
+@keyframes progress {
+  0% { width: 0; }
+  76% { width: 100%; }
+  100% { width: 100%; }
+}
+
+/* 프로필 카드 영역 (캐릭터 이미지 + 이메일/버튼) */
+.info {
+  padding: 5rem;
+  position: relative;
+  background-color: var(--color-light);
+}
+
+.memoji {
+  cursor: pointer;
+  position: relative;
+  width: 13rem;
+  height: 13rem;
+}
+.memoji__box {
+  position: absolute;
+  background-color: var(--color-gray);
+  padding: 0.5rem 1.5rem;
+  font-weight: 800;
+  font-size: 1.5rem;
+  border-radius: 2rem;
+  color: var(--color-light);
+  left: -1rem;
+  top: -1.5rem;
+  transform: rotate(-10deg);
+  border: 0.2rem solid white;
+}
+.memoji__image {
+  width: 13rem;
+  height: 13rem;
+  border-radius: 50%;
+  background-color: var(--color-point);
+}
+/* 평소엔 투명(opacity: 0)해서 안 보이다가, 마우스를 올려서 .is-hover
+   클래스가 붙으면 서서히 나타나는 정보창입니다 */
+.memoji__info-circle {
+  opacity: 0;
+  transition: 0.3s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 13rem;
+  height: 13rem;
+  border-radius: 50%;
+  background-color: var(--color-gray);
+}
+.memoji__info {
+  font-weight: 500;
+  opacity: 0;
+  transition: 0.2s;
+  position: absolute;
+  top: 3.5rem;
+  left: 0;
+  color: #fff;
+  text-align: center;
+  line-height: 2rem;
+  width: 13rem;
+}
+.memoji.is-hover .memoji__info-circle,
+.memoji.is-hover .memoji__info {
+  opacity: 1;
+}
+
+.info__box {
+  border-radius: 2.5rem;
+  padding: 2rem;
+  margin-left: 5rem;
+  /* 이메일 + 버튼 3개가 들어가야 해서, 높이를 고정하면 내용이 넘칠 수
+     있습니다. min-height로 최소 크기만 잡아주고 나머지는 내용에 맞춰
+     자동으로 늘어나게 했습니다. */
+  min-height: 13rem;
+  width: 24rem;
+  display: flex;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.8rem;
+  border: 0.2rem solid var(--color-point);
+}
+/* 이메일도 GITHUB/BLOG/RESUME 버튼과 같은 알약 모양 스타일을 쓰도록
+   선택자를 묶어서 함께 적용했습니다 */
+.info__email,
+.info__button {
+  cursor: default;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.8rem 2rem;
+  border-radius: 2rem;
+  background-color: var(--color-gray);
+  color: var(--color-light);
+  text-align: center;
+}
+.info__button {
+  cursor: pointer;
+}
+.info__button:hover {
+  background-color: var(--color-point);
+}
+
+/* 자기소개 문단 */
+.about-text {
+  white-space: pre-line;
+  line-height: 230%;
+  margin-top: 3rem;
+  font-size: 1.1rem;
+  padding: 0 5rem 3rem;
+}
+
+/*
+   7. Skill 섹션 (보유 기술)
+ */
+.page3 {
+  max-width: 1373px;
+  margin: 0 auto;
+  /* 스킬 카드 4개를 넣다 보니 내용이 화면 한 장보다 길어질 수 있어서,
+     높이를 고정하지 않고 min-height로 최소 높이만 확보했습니다. */
+  min-height: 100vh;
+  padding: 4rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* 섹션 제목(Strength. 등)은 글자를 두 겹으로 겹쳐서, 하나는 색을 칠하고
+   하나는 살짝 어긋난 위치에 다른 색으로 깔아서 입체적인 그림자 느낌을 냅니다 */
+.section-title {
+  width: 90%;
+  position: relative;
+  font-size: 3rem;
+  font-weight: 800;
+}
+.strength-title {
+  color: var(--color-point);
+}
+.strength-title::after {
+  content: "Strength.";
+  position: absolute;
+  color: var(--color-light);
+  top: -0.3rem;
+  left: -0.3rem;
+  z-index: -1;
+}
+
+.strength-tags {
+  width: 90%;
+  margin-top: 2rem;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.strength-tags__item {
+  border: 0.2rem solid var(--color-gray);
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: 1rem;
+  color: var(--color-gray);
+}
+
+.skill-grid {
+  width: 90%;
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.skill-box {
+  border: 0.2rem solid var(--color-point);
+  border-radius: 2rem;
+  padding: 2rem;
+  position: relative;
+}
+/* 카드 왼쪽 위에 살짝 기울어져 붙어있는 이름표 라벨 */
+.skill-box__name {
+  display: inline-block;
+  transform: rotate(-10deg);
+  position: absolute;
+  left: -1.5rem;
+  top: -1.5rem;
+  border: 0.2rem solid var(--color-light);
+  color: var(--color-point);
+  background-color: #222831;
+  padding: 0.5rem 1rem;
+  font-size: 2rem;
+  font-weight: 800;
+}
+.skill-box__list {
+  margin-top: 1.5rem;
+  line-height: 150%;
+}
+.skill-box__list li {
+  line-height: 2rem;
+  position: relative;
+}
+
+/* 
+   8. Career & Activity 섹션 (경력 + 대외활동 타임라인)
+   회사 경력이랑 동아리 활동을 각각 다른 목록으로 보여줄 수도 있었지만,
+   시간 순서로 한눈에 보이게 하고 싶어서 하나의 타임라인으로 합쳤습니다.
+   가운데 세로선을 두고 카드를 좌우로 번갈아 배치했고, 카드 위의 작은
+   배지 색으로 Career/Activity만 구분해줍니다.
+*/
+.page4 {
+  max-width: 1373px;
+  margin: 0 auto;
+  padding: 5rem 0;
+  position: relative;
+}
+
+.timeline-title {
+  color: var(--color-timeline);
+  margin-bottom: 3rem;
+}
+
+.timeline {
+  position: relative;
+  width: 100%;
+  padding: 2rem 0;
+}
+/* 가운데를 세로로 관통하는 타임라인 선 */
+.timeline__line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 0.3rem;
+  background-color: var(--color-timeline);
+  transform: translateX(-50%);
+}
+
+.timeline__item {
+  position: relative;
+  width: 50%;
+  box-sizing: border-box;
+  margin-bottom: 3rem;
+  display: flex;
+}
+/* 왼쪽 칸에 놓이는 카드는 오른쪽으로, 오른쪽 칸에 놓이는 카드는 왼쪽으로
+   붙여서, 가운데 선을 사이에 두고 지그재그 모양이 나오게 했습니다 */
+.timeline__item--left {
+  justify-content: flex-end;
+  padding-right: 3rem;
+}
+.timeline__item--right {
+  margin-left: 50%;
+  justify-content: flex-start;
+  padding-left: 3rem;
+}
+
+.timeline__card {
+  max-width: 26rem;
+  background-color: var(--color-light);
+  border-radius: 1rem;
+  padding: 1.2rem 1.5rem;
+}
+.timeline__badge {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+}
+.timeline__badge--career {
+  background-color: var(--color-point);
+}
+.timeline__badge--activity {
+  background-color: var(--color-timeline);
+}
+.timeline__name {
+  margin-top: 0.6rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #346751;
+}
+.timeline__date {
+  margin-top: 0.2rem;
+  color: var(--color-gray);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.timeline__desc {
+  margin-top: 0.4rem;
+  color: var(--color-gray);
+}
+
+/* 
+   9. Projects 섹션
+- */
+.page5 {
+  position: relative;
+  overflow-x: hidden;
+  margin-top: 5rem;
+  background-color: var(--color-project-bg);
+  padding: 8rem 8rem 6rem;
+}
+.projects-title {
+  color: var(--color-green-text);
+  font-size: 8rem;
+  font-weight: 800;
+  margin-bottom: 3rem;
+}
+/* 제목 뒤에 파란 테두리만 있는 글자를 살짝 어긋난 위치에 겹쳐서
+   입체감 있는 로고 느낌을 냈습니다 */
+.projects-title::after {
+  content: "Projects.";
+  position: absolute;
+  color: transparent;
+  -webkit-text-stroke: 0.1rem var(--color-blue);
+  top: -0.4rem;
+  left: -0.4rem;
+  z-index: -1;
+}
+
+/* 기술스택 필터 버튼 줄 */
+.project-filter {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 3rem;
+}
+.project-filter__btn {
+  padding: 0.5rem 1.4rem;
+  border-radius: 2rem;
+  border: 0.12rem solid var(--color-gray);
+  color: var(--color-gray);
+  font-weight: 700;
+}
+/* 현재 선택된 필터 버튼만 배경을 채워서 어떤 게 선택됐는지 알 수 있게 합니다 */
+.project-filter__btn.is-active {
+  background-color: var(--color-gray);
+  color: var(--color-light);
+}
+/* 선택한 스택과 다른 카드는 js/script.js에서 이 클래스를 붙여서 숨깁니다 */
+.project-box.is-filtered-out {
+  display: none;
+}
+
+.projects {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.project-box {
+  box-sizing: border-box;
+  width: 70%;
+  padding: 2rem;
+  position: relative;
+  border-radius: 2rem;
+  background-color: var(--color-card-bg);
+  color: var(--color-gray);
+}
+/* 홀수 번째 카드는 초록 테두리, 화면 오른쪽으로 붙임 */
+.project-box--green {
+  margin-right: auto;
+  border: 0.1rem solid var(--color-green);
+}
+.project-box--green .project-box__title {
+  color: #000;
+  background-color: var(--color-green);
+  border: 0.1rem solid var(--color-green);
+  left: -1.5rem;
+  transform: rotate(-8deg);
+}
+.project-box--green .project-box__about {
+  color: var(--color-green-text);
+}
+/* 짝수 번째 카드는 파란 테두리, 화면 왼쪽으로 붙임 */
+.project-box--blue {
+  margin-left: auto;
+  border: 0.1rem solid var(--color-blue);
+}
+.project-box--blue .project-box__title {
+  color: #fff;
+  background-color: var(--color-blue);
+  border: 0.1rem solid var(--color-blue);
+  right: -1.5rem;
+  left: auto;
+  transform: rotate(8deg);
+}
+.project-box--blue .project-box__about {
+  color: var(--color-blue);
+}
+
+/* 카드 위쪽에 살짝 기울어져 걸쳐있는 프로젝트 이름표 */
+.project-box__title {
+  font-weight: 800;
+  position: absolute;
+  padding: 0.6rem 1rem;
+  border-radius: 1rem;
+  top: -1.8rem;
+}
+.project-box__date {
+  display: inline-block;
+  padding: 0 1rem;
+  /* 카드 배경색과 똑같이 맞춰서, 이름표 테두리가 지나가는 자리에
+     자연스럽게 녹아들어 보이도록 했습니다 */
+  background-color: var(--color-card-bg);
+  margin-top: 0.5rem;
+}
+.project-box__skills {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  gap: 0.5rem;
+}
+.project-box__skills span {
+  background-color: var(--color-gray);
+  color: var(--color-light);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+}
+.project-box__about {
+  margin: 0.5rem 0;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+/* 자세한 설명 목록은 기본적으로 접어두고(display: none), "더보기" 버튼을
+   눌러서 .is-expanded 클래스가 붙었을 때만 펼쳐지게 했습니다.
+   처음부터 다 펼쳐두면 카드 하나가 너무 길어져서 스크롤이 부담스러웠는데,
+   접어두니 카드 목록을 죽 훑어보기가 훨씬 편해졌습니다. */
+.project-box__content {
+  display: none;
+}
+.project-box.is-expanded .project-box__content {
+  display: block;
+  margin-top: 0.5rem;
+}
+.project-box__content li {
+  line-height: 1.5rem;
+}
+.project-box__toggle {
+  margin-top: 0.8rem;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}
+/* 펼쳐진 상태일 때 화살표를 180도 돌려서 "지금 열려있다"는 걸 표시합니다 */
+.project-box__toggle-arrow {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+.project-box.is-expanded .project-box__toggle-arrow {
+  transform: rotate(180deg);
+}
+.project-box__icons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+/* GitHub / 사이트 링크 아이콘. 별도 이미지 파일 없이, 배경 없는 원형
+   버튼 + 짧은 글자(GH, 화살표)로 간단하게 표현했습니다 */
+.icon-btn {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 0.12rem solid currentColor;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.project-box--green .icon-btn { color: var(--color-green-text); }
+.project-box--blue .icon-btn { color: var(--color-blue); }
+.icon-btn::before {
+  content: "GH";
+}
+.icon-btn[data-icon="link"]::before {
+  content: "⤴";
+}
+
+.page5__footer {
+  text-align: right;
+  margin-top: 4rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-gray);
+}
+
+/* 
+   10. 공통 - 맨 위로 가기 버튼
+ */
+.scroll-top-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background-color: white;
+  border: 0.1rem solid var(--color-gray);
+  border-radius: 50%;
+  position: fixed;
+  bottom: 4rem;
+  right: 3rem;
+  z-index: 10;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.scroll-top-btn:hover {
+  opacity: 1;
+}
+.scroll-top-btn svg {
+  fill: var(--color-gray);
+}
+
+/* 
+   11. 스크롤하며 나타나는 애니메이션 (data-aos 속성이 붙은 요소들)
+   요소가 화면에 보일 때만 살짝 이동하면서 서서히 나타나게 하고 싶어서,
+   기본 상태(투명 + 약간 이동)를 여기서 정의해두고, 화면에 들어오면
+   js/script.js가 is-visible 클래스를 붙여서 원래 위치/투명도로
+   돌아오게 만들었습니다.
+ */
+[data-aos] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+[data-aos="fade-left"] {
+  transform: translateX(60px);
+}
+[data-aos="fade-right"] {
+  transform: translateX(-60px);
+}
+[data-aos].is-visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* 
+   12. 반응형(모바일)
+   화면 폭이 420px 이하로 좁아지면 레이아웃이 꽤 많이 바뀌어서
+   미디어 쿼리로 따로 모아뒀습니다.
+ */
+@media (max-width: 420px) {
+  html {
+    font-size: 8px; /* rem 단위 기준값을 줄여서 전체적으로 작게 보이게 함 */
+  }
+
+  /* 좁은 화면에서는 로고 + 메뉴 4개가 한 줄에 다 안 들어가서 메뉴 일부가
+     화면 밖으로 잘리는 문제가 있었습니다. 글자를 억지로 줄이기보다,
+     메뉴 줄을 로고 아래 둘째 줄로 내리는(flex-wrap) 방식을 택했습니다. */
+  .top-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .top-nav__links {
+    width: 100%;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: 0.6rem;
+  }
+  /* 네비게이션 바가 두 줄이 되면서 높이가 늘어난 만큼, 히어로 위쪽
+     여백도 같이 늘려서 이름 글자가 메뉴에 가려지지 않게 했습니다 */
+  .hero {
+    padding-top: 9rem;
+  }
+
+  .info {
+    flex-direction: column;
+  }
+  .info__box {
+    margin-top: 5rem;
+    margin-left: 0;
+  }
+
+  .about-text {
+    font-size: 1.3rem;
+    line-height: 200%;
+    font-weight: 700;
+    padding-left: 7rem;
+  }
+
+  .skill-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 모바일 화면에서는 좌우로 지그재그 배치할 공간이 부족해서, 세로선을
+     맨 왼쪽으로 옮기고 카드를 전부 한 줄로 세웠습니다. */
+  .timeline__line {
+    left: 1rem;
+  }
+  .timeline__item,
+  .timeline__item--right {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+    padding-left: 3rem;
+    padding-right: 0;
+  }
+  .timeline__card {
+    max-width: none;
+  }
+
+  .page5 {
+    padding: 7rem 4rem;
+  }
+  .project-box {
+    width: 100%;
+    margin: 0 !important;
+  }
+
+  .scroll-top-btn {
+    width: 5rem;
+    height: 5rem;
+  }
+}

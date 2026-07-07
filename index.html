@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<!--
+  개인 포트폴리오 사이트 메인 페이지입니다.
+  라이브러리나 프레임워크 없이 순수 HTML + CSS + JavaScript로만 만들었습니다.
+  스타일은 css/style.css, 버튼 클릭이나 애니메이션 같은 동작은
+  js/script.js에 정리해뒀습니다.
+-->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>김태현 - kimtaehyun</title>
+
+  <!-- 브라우저 탭에 표시되는 작은 아이콘(파비콘) -->
+  <link rel="shortcut icon" href="images/memoji.svg" type="image/svg+xml" />
+
+  <!-- 카카오톡, 페이스북 등으로 링크를 공유했을 때 보여줄 미리보기 정보 (오픈그래프) -->
+  <meta property="og:title" content="김태현 - KIMTAEHYUN" />
+  <meta property="og:image" content="images/main.png" />
+  <meta property="og:description" content="jeongmin's dev portfolio site" />
+
+  <!-- 구글 폰트에서 Montserrat 폰트를 가져옵니다 -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+
+  <!--
+    상단 고정 네비게이션 바.
+    스크롤을 아무리 내려도 화면 맨 위에 계속 붙어있습니다.
+    <a href="#about"> 처럼 #id로 연결해두면, style.css에 적어둔
+    html { scroll-behavior: smooth; } 덕분에 따로 JS를 안 짜도
+    클릭했을 때 부드럽게 스크롤 이동이 됩니다.
+  -->
+  <nav class="top-nav">
+    <a href="#home" class="top-nav__logo">TH.</a>
+    <ul class="top-nav__links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skill</a></li>
+      <li><a href="#career">Career</a></li>
+      <li><a href="#projects">Project</a></li>
+    </ul>
+  </nav>
+
+  <!-- 페이지 전체를 감싸는 큰 박스 -->
+  <div id="wrapper">
+
+    <!--
+      HERO 섹션 (첫 화면)
+      이름이랑 직무를 크게 보여주고, 아래로 스크롤하라는 화살표 버튼을 뒀습니다.
+      너무 화려하게 만들면 안에 든 내용이 없어보일까봐, 심플하게
+      "인사말 + 이름 + 직무 + 화살표" 정도로만 구성했습니다.
+    -->
+    <section class="hero" id="home">
+      <p class="hero__eyebrow">Hello, I'm</p>
+      <h1 class="hero__name">KIM TAE HYUN</h1>
+      <p class="hero__role">WEB HACKING</p>
+      <a href="#about" class="hero__scroll-cue" aria-label="아래로 스크롤">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+          <path d="M12 16l-8-8 1.41-1.41L12 13.17l6.59-6.58L20 8z"></path>
+        </svg>
+      </a>
+    </section>
+
+    <!--
+      About 섹션 (자기소개)
+      둥근 모서리 카드 안에 기술 슬라이더 + 프로그레스바 + 프로필 정보 +
+      소개 글을 넣었습니다. 카드 하나에 정보를 다 모아두면 눈에 잘 들어올
+      것 같아서 이렇게 구성했습니다.
+    -->
+    <div class="page2-wrapper flex" id="about">
+      <div class="page2-container flex">
+
+        <!-- 몇 초 간격으로 옆으로 넘어가는 기술 슬라이드 텍스트 -->
+        <div class="text-slider">
+          <div class="text-slider__track">
+            <div class="text-slider__slide"><span class="gradient-text">Flask</span></div>
+            <div class="text-slider__slide"><span class="gradient-text">Mysql</span></div>
+            <div class="text-slider__slide"><span class="gradient-text">HTML / CSS</span></div>
+            <div class="text-slider__slide"><span class="gradient-text">Javascript</span></div>
+          </div>
+        </div>
+
+        <!-- 슬라이드가 얼마나 넘어갔는지 보여주는 얇은 진행 막대 -->
+        <div class="progress-bar">
+          <div class="progress-bar__fill"></div>
+        </div>
+
+        <!-- 프로필 카드: 캐릭터 이미지 + 이메일/링크 버튼 -->
+        <div class="info flex" data-aos="fade-up">
+          <!-- 마우스를 올리면 이름/생일/학교 정보가 뜨는 캐릭터 아이콘 -->
+          <div class="memoji" id="memoji">
+            <div class="memoji__box">WEB HACKING</div>
+            <img class="memoji__image" src="images/images.jpeg" alt="이정민 캐릭터 이미지" />
+
+            <!-- 평소엔 투명 상태로 숨어있다가, 호버하면 서서히 나타나는 정보창 -->
+            <div class="memoji__info-circle"></div>
+            <div class="memoji__info">
+              김태현<br />199x.11.08<br />Gyeongsang Univ.
+            </div>
+          </div>
+
+          <!-- 이메일 + 외부 링크 버튼들 -->
+          <div class="info__box">
+            <div class="info__email">alogic71@naver.com</div>
+            <button type="button" class="info__button" data-link="github">GITHUB</button>
+            <button type="button" class="info__button" data-link="blog">BLOG</button>
+            <button type="button" class="info__button" data-link="resume">RESUME</button>
+          </div>
+        </div>
+
+        <!-- 자기소개 문단. 강조하고 싶은 단어는 <strong class="gradient-text">로 감쌌습니다 -->
+        <p class="about-text" data-aos="fade-up">
+          웹사이트가 어떻게 동작하는지 알아갈수록, 그 안에 숨어 있는 허점까지 눈에 들어오기 시작했습니다. 그러면서 자연스럽게 관심이 넘어간 분야가 <strong class="gradient-text">웹해킹</strong>입니다.
+          프론트엔드든 백엔드든 가리지 않고 들여다보려 하는 이유도, 결국 공격자의 시각으로 서비스를 바라보려면 전체를 알아야 한다고 생각하기 때문입니다.
+          "우물 안 개구리가 되지 말자, 내가 아는 것이 전부가 아니다." 이문장을 항상 되새기며 지내다 보니, <strong class="gradient-text">한 가지 방식에만 머무르기보다는 이것저것 부딛혀보는</strong>쪽으로 자연스럽게 손이 가게 됐습니다.
+          그렇게 여러 대외활동과 협업을 거치면서, 매번 새롭게 주어진 도전이 저에게는 오히려 반가운 자극이었습니다. 앞으로도 스스로에게 계속 새로운 과제를 던지면서, <strong class="gradient-text">웹해킹 역량을 꾸준히 키워나가고자</strong>합니다.
+        </p>
+      </div>
+    </div>
+
+    <!--
+      Skill 섹션 (보유 기술)
+      위쪽엔 짧은 키워드 태그들을 나열하고, 아래엔 Flask/Mysql/HTML,CSS/JS
+      카드 4개로 조금 더 자세한 내용을 적었습니다. 태그만 봐도 대충 뭘
+      다루는지 알 수 있고, 더 궁금하면 아래 카드를 읽어보게 하는 구조입니다.
+    -->
+    <section class="page3" id="skills">
+      <h2 class="section-title strength-title" data-aos="fade-right">Strength.</h2>
+
+      <!-- 짧게 나열하는 기술 키워드 목록 -->
+      <div class="strength-tags flex" data-aos="fade-up">
+        <span class="strength-tags__item">Flask</span>
+        <span class="strength-tags__item">Mysql</span>
+        <span class="strength-tags__item">HTML</span>
+        <span class="strength-tags__item">CSS</span>
+        <span class="strength-tags__item">JavaScript</span>
+      </div>
+
+      <!-- 기술별 상세 설명 카드 4개 -->
+      <div class="skill-grid">
+        <div class="skill-box" data-aos="fade-up">
+          <span class="skill-box__name">Flask</span>
+          <ul class="skill-box__list">
+            <li>예시1</li>
+            <li>예시2</li>
+          </ul>
+        </div>
+
+        <div class="skill-box" data-aos="fade-up">
+          <span class="skill-box__name">Mysql</span>
+          <ul class="skill-box__list">
+            <li>예시1</li>
+            <li>예시2</li>
+          </ul>
+        </div>
+
+        <div class="skill-box" data-aos="fade-up">
+          <span class="skill-box__name">HTML/CSS</span>
+          <ul class="skill-box__list">
+            <li>예시1.</li>
+            <li>예시2</li>
+          </ul>
+        </div>
+
+        <div class="skill-box" data-aos="fade-up">
+          <span class="skill-box__name">CSS/JS</span>
+          <ul class="skill-box__list">
+            <li>예시1</li>
+            <li>예시2</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      Career & Activity 섹션 (경력 + 대외활동)
+      회사 경력이랑 동아리/대외활동을 따로따로 나눠서 보여줄 수도 있었는데,
+      그러면 "언제 무슨 일을 했는지" 시간 순서로 한눈에 보기가 어려울 것
+      같아서 하나의 타임라인으로 합쳤습니다. 시작 날짜가 최근인 순서대로
+      나열하고, 카드 위에 작은 배지로 Career인지 Activity인지만 구분해줍니다.
+    -->
+    <section class="page4" id="career">
+      <h2 class="section-title timeline-title" data-aos="fade-right">Career &amp; Activity.</h2>
+
+      <!-- 가운데 세로선을 기준으로 카드가 좌우로 번갈아 나오는 타임라인 -->
+      <div class="timeline">
+        <div class="timeline__line"></div>
+
+        <div class="timeline__item timeline__item--left" data-aos="fade-right">
+          <div class="timeline__card">
+            <span class="timeline__badge timeline__badge--career">Career</span>
+            <div class="timeline__name">예시1</div>
+            <div class="timeline__date">2021.07.05 ~ 2021.08.31</div>
+            <div class="timeline__desc">내용1</div>
+          </div>
+        </div>
+
+        <div class="timeline__item timeline__item--right" data-aos="fade-left">
+          <div class="timeline__card">
+            <span class="timeline__badge timeline__badge--activity">Activity</span>
+            <div class="timeline__name">예시1</div>
+            <div class="timeline__date">10기 (2023.03.06 ~ 2023.05.19)</div>
+            <div class="timeline__desc">내용1</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      Projects 섹션
+      진행했던 프로젝트를 카드 형태로 나열합니다. 카드 색은 초록/파랑을
+      번갈아 써서 리스트가 단조로워 보이지 않게 했고, 위쪽 필터 버튼으로
+      기술 스택별로 골라볼 수 있게 했습니다.
+    -->
+    <section class="page5" id="projects">
+      <h2 class="section-title projects-title" data-aos="fade-up">Projects.</h2>
+
+      <!--
+        기술스택 필터 버튼.
+        버튼을 누르면 js/script.js가 각 카드의 data-stack 값을 확인해서
+        선택한 스택과 다른 카드는 화면에서 숨깁니다.
+      -->
+      <div class="project-filter" data-aos="fade-up">
+        <button type="button" class="project-filter__btn is-active" data-filter="all">전체</button>
+        <button type="button" class="project-filter__btn" data-filter="react">HTML</button>
+        <button type="button" class="project-filter__btn" data-filter="vue">CSS</button>
+        <button type="button" class="project-filter__btn" data-filter="react-native">JS</button>
+        <button type="button" class="project-filter__btn" data-filter="react-native">Flask</button>
+        <button type="button" class="project-filter__btn" data-filter="react-native">Mysql</button>
+      </div>
+
+      <div class="projects">
+        <!--
+          프로젝트 카드마다 있는 "더보기" 버튼은 설명 목록(project-box__content)을
+          펼치고 접는 역할을 합니다. 처음부터 다 펼쳐두면 카드 하나가 너무 길어져서
+          스크롤이 부담스러웠는데, 기본적으로 접어두니 훨씬 깔끔해졌습니다.
+        -->
+
+        <!-- 프로젝트 1 -->
+        <article class="project-box project-box--green" data-aos="fade-up" data-stack="react">
+          <div class="project-box__title">제목1</div>
+          <div class="project-box__date">2021.03 ~ 2021.04 (1명)</div>
+          <div class="project-box__skills">
+            <span>HTML</span><span>CSS</span><span>JS</span>
+            <span>Mysql</span><span>Flask</span>
+          </div>
+          <div class="project-box__about">예시1</div>
+          <button type="button" class="project-box__toggle">더보기 <span class="project-box__toggle-arrow">⌄</span></button>
+          <ul class="project-box__content">
+            <li>내용1</li>
+            <li>내용2</li>
+          </ul>
+          <div class="project-box__icons">
+            <button type="button" class="icon-btn" title="GitHub" data-icon="github"></button>
+            <button type="button" class="icon-btn" title="사이트 링크" data-icon="link"></button>
+          </div>
+        </article>
+
+        <!-- 프로젝트 2 -->
+        <article class="project-box project-box--blue" data-aos="fade-up" data-stack="vue">
+          <div class="project-box__title">제목2</div>
+          <div class="project-box__date">2020.11 ~ 2021.02 (3명)</div>
+          <div class="project-box__skills">
+            <span>HTML</span><span>CSS</span><span>JS</span>
+            <span>Mysql</span><span>Flask</span>
+          </div>
+          <div class="project-box__about">예시2</div>
+          <button type="button" class="project-box__toggle">더보기 <span class="project-box__toggle-arrow">⌄</span></button>
+          <ul class="project-box__content">
+            <li>내용1</li>
+            <li>내용2</li>
+          </ul>
+          <div class="project-box__icons">
+            <button type="button" class="icon-btn" title="GitHub" data-icon="github"></button>
+            <button type="button" class="icon-btn" title="사이트 링크" data-icon="link"></button>
+          </div>
+        </article>
+      </div>
+
+      <div class="page5__footer">Designed &amp; Developed By KimTaeHyun</div>
+    </section>
+  </div>
+
+  <!-- 화면 맨 위로 이동하는 버튼. 오른쪽 아래에 항상 떠 있습니다 -->
+  <button type="button" id="scrollTopBtn" class="scroll-top-btn" aria-label="맨 위로 이동">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+      <path d="M12 4l-9 9h6v7h6v-7h6z"></path>
+    </svg>
+  </button>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -46,9 +46,10 @@ open index.html   # Windows는 그냥 더블클릭
 
 - **기능**: 게시글 CRUD(작성/조회/수정/삭제), 검색(제목/내용/전체)
 - **기술 스택**: Flask, pymysql, MySQL
-- **배포**: 네이버클라우드플랫폼(VPS)에 Flask(gunicorn)+MySQL+nginx로 배포되어 있어서, 외부에서도 접속 가능합니다.
-- 코드와 실행 방법, 배포 방법은 [board/DEPLOY.md](board/DEPLOY.md)에 정리해뒀습니다.
+- **배포 주소**: https://tae-hyun.duckdns.org/board/posts (네이버클라우드플랫폼 VPS, Let's Encrypt로 HTTPS 적용)
+- **배포**: Flask(gunicorn) + MySQL + nginx로 배포, http로 접속해도 자동으로 https로 리다이렉트됩니다.
 - DB 접속 비밀번호는 `board/.env`에서 관리하며, 코드에 하드코딩하지 않고 `.gitignore`로 커밋에서 제외했습니다.
+- 실행 방법: `board/` 폴더에서 `pip install -r requirements.txt` 후 `python3 app.py` (사전에 MySQL에 `schema.sql` 실행 필요)
 
 ## 폴더 구조
 

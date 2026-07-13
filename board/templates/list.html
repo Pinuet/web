@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}게시판{% endblock %}
+{% block content %}
+  <!-- 제목 + 글쓰기 버튼 -->
+  <div class="board-header">
+    <h1 class="board-title">Board.</h1>
+    <a href="{{ url_for('new_post') }}" class="btn btn--point">글쓰기</a>
+  </div>
+
+  <!-- 검색창. select로 제목/내용/전체 중 하나 고른 다음 검색어를 입력합니다 -->
+  <form class="search-form" method="get" action="{{ url_for('list_posts') }}">
+    <select name="scope" class="search-form__select">
+      <option value="all" {% if scope == 'all' %}selected{% endif %}>전체</option>
+      <option value="title" {% if scope == 'title' %}selected{% endif %}>제목</option>
+      <option value="content" {% if scope == 'content' %}selected{% endif %}>내용</option>
+    </select>
+    <input
+      type="text"
+      name="q"
+      class="search-form__input"
+      placeholder="검색어를 입력하세요"
+      value="{{ query }}"
+    />
+    <button type="submit" class="btn btn--gray">검색</button>
+  </form>
+
+  <!-- 검색어가 있을 때만 몇 건 나왔는지 보여줍니다 -->
+  {% if query %}
+    <p class="search-result-info">
+      "<strong>{{ query }}</strong>" 검색 결과 {{ posts|length }}건
+      <a href="{{ url_for('list_posts') }}" class="search-result-info__clear">검색 초기화</a>
+    </p>
+  {% endif %}
+
+  <!-- 게시글 목록. posts가 비어있으면(글이 하나도 없으면) 안내 문구를 보여줍니다 -->
+  <table class="post-table">
+    <thead>
+      <tr>
+        <th class="post-table__id">번호</th>
+        <th class="post-table__title">제목</th>
+        <th class="post-table__author">작성자</th>
+        <th class="post-table__views">조회</th>
+        <th class="post-table__date">작성일</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}
+        <tr>
+          <td class="post-table__id">{{ post.id }}</td>
+          <td class="post-table__title">
+            <a href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a>
+          </td>
+          <td class="post-table__author">{{ post.author }}</td>
+          <td class="post-table__views">{{ post.views }}</td>
+          <td class="post-table__date">{{ post.created_at.strftime('%Y-%m-%d') }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="5" class="post-table__empty">게시글이 없습니다.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

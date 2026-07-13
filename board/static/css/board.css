@@ -1,0 +1,260 @@
+/*
+  board.css
+  게시판 페이지들 스타일입니다.
+  포트폴리오 사이트(css/style.css)에서 쓰던 색상 팔레트를 그대로 가져와서,
+  게시판도 같은 사이트의 한 페이지처럼 보이게 맞췄습니다.
+*/
+:root {
+  --color-bg: #ffffff;
+  --color-light: #eeeeee;
+  --color-gray: #393e46;
+  --color-point: #00adb5;
+  --color-danger: #c84b31;
+  --color-card-bg: #f4f4f4;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Montserrat", sans-serif;
+  color: var(--color-gray);
+}
+
+body {
+  background-color: var(--color-bg);
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 상단 네비게이션 */
+.board-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 3rem;
+  border-bottom: 1px solid #e2e2e2;
+}
+.board-nav__logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-point);
+}
+.board-nav__back {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-gray);
+}
+.board-nav__back:hover {
+  color: var(--color-point);
+}
+
+.board-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+}
+
+.board-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.board-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+/* 버튼 */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.3rem;
+  border-radius: 2rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+}
+.btn--point {
+  background-color: var(--color-point);
+  color: #fff;
+}
+.btn--point:hover {
+  opacity: 0.85;
+}
+.btn--gray {
+  background-color: var(--color-gray);
+  color: var(--color-light);
+}
+.btn--gray:hover {
+  opacity: 0.85;
+}
+.btn--danger {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+.btn--danger:hover {
+  opacity: 0.85;
+}
+
+/* 검색 폼 */
+.search-form {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.search-form__select {
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  border: 0.12rem solid var(--color-gray);
+  font-weight: 600;
+  background-color: #fff;
+}
+.search-form__input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: 0.6rem;
+  border: 0.12rem solid var(--color-gray);
+}
+.search-form__input:focus,
+.search-form__select:focus {
+  outline: 0.12rem solid var(--color-point);
+}
+
+.search-result-info {
+  margin-bottom: 1rem;
+  color: var(--color-gray);
+  font-size: 0.95rem;
+}
+.search-result-info__clear {
+  margin-left: 0.6rem;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+/* 목록 테이블 */
+.post-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.post-table th {
+  text-align: left;
+  padding: 0.8rem;
+  border-bottom: 0.15rem solid var(--color-gray);
+  font-size: 0.9rem;
+  color: var(--color-gray);
+}
+.post-table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid #e2e2e2;
+}
+.post-table__id,
+.post-table__views {
+  width: 5rem;
+  text-align: center;
+}
+.post-table__author {
+  width: 8rem;
+}
+.post-table__date {
+  width: 8rem;
+}
+.post-table__title a:hover {
+  color: var(--color-point);
+}
+.post-table__empty {
+  text-align: center;
+  padding: 3rem 0;
+  color: #999;
+}
+
+/* 상세 보기 */
+.post-view__title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+}
+.post-view__meta {
+  display: flex;
+  gap: 1rem;
+  color: #888;
+  font-size: 0.9rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e2e2;
+  margin-bottom: 1.5rem;
+}
+.post-view__content {
+  white-space: pre-line; /* textarea에서 엔터 친 줄바꿈이 그대로 보이게 하려고 넣었습니다 */
+  min-height: 10rem;
+  line-height: 1.8;
+}
+.post-view__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 3rem;
+}
+.post-view__delete-form {
+  display: inline;
+}
+
+/* 작성/수정 폼 */
+.form-error {
+  color: var(--color-danger);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.post-form__row {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.post-form__row label {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.post-form__row input,
+.post-form__row textarea {
+  padding: 0.7rem 1rem;
+  border-radius: 0.6rem;
+  border: 0.12rem solid var(--color-gray);
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+}
+.post-form__row input:focus,
+.post-form__row textarea:focus {
+  outline: 0.12rem solid var(--color-point);
+}
+.post-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .board-nav {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .board-main {
+    padding: 2rem 1rem 4rem;
+  }
+  .post-table__author,
+  .post-table__date {
+    display: none;
+  }
+}

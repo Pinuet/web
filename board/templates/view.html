@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+  <!-- 글 상세보기. 이 페이지에 들어올 때마다 app.py에서 조회수를 1씩 올려줍니다 -->
+  <article class="post-view">
+    <h1 class="post-view__title">{{ post.title }}</h1>
+    <div class="post-view__meta">
+      <span>{{ post.author }}</span>
+      <span>{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+      <span>조회 {{ post.views }}</span>
+    </div>
+    <div class="post-view__content">{{ post.content }}</div>
+
+    <div class="post-view__actions">
+      <a href="{{ url_for('list_posts') }}" class="btn btn--gray">목록</a>
+      <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn--gray">수정</a>
+      <!-- 삭제는 실수로 누를 수도 있어서, confirm 창을 한 번 띄우고 확인하면 삭제되게 했습니다 -->
+      <form
+        method="post"
+        action="{{ url_for('delete_post', post_id=post.id) }}"
+        class="post-view__delete-form"
+        onsubmit="return confirm('이 글을 삭제할까요?');"
+      >
+        <button type="submit" class="btn btn--danger">삭제</button>
+      </form>
+    </div>
+  </article>
+{% endblock %}

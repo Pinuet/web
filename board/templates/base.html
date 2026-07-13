@@ -1,0 +1,32 @@
+<!--
+  base.html
+  게시판 페이지들이 공통으로 쓰는 틀입니다.
+  상단바(nav)랑 폰트, board.css 연결은 여기서 한 번만 해두고,
+  각 페이지(list.html, view.html, write.html)는 아래 content 블록
+  안쪽만 채워서 씁니다. index.html에 있는 top-nav 구조랑 비슷하게 맞췄습니다.
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}게시판{% endblock %} - KIM TAE HYUN</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/board.css') }}" />
+</head>
+<body>
+  <!-- 게시판 로고 + 포트폴리오 메인으로 돌아가는 링크 -->
+  <nav class="board-nav">
+    <a href="{{ url_for('list_posts') }}" class="board-nav__logo">TH. Board</a>
+    <a href="/" class="board-nav__back">포트폴리오로 돌아가기</a>
+  </nav>
+
+  <main class="board-main">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

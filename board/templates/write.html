@@ -41,6 +41,24 @@
       />
     </div>
 
+    {% if editing %}
+      <!-- 수정 버튼을 눌렀을 때 이미 비밀번호를 확인했기 때문에, 여기서는 다시 안 물어보고
+           확인된 비밀번호를 그대로 hidden으로 실어서 같이 제출합니다. -->
+      <input type="hidden" name="password" value="{{ password }}" />
+    {% else %}
+      <div class="post-form__row">
+        <label for="password">비밀번호</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          maxlength="50"
+          required
+          placeholder="수정/삭제할 때 필요한 비밀번호"
+        />
+      </div>
+    {% endif %}
+
     <div class="post-form__row">
       <label for="content">내용</label>
       <textarea id="content" name="content" rows="12" required>{{ post.content if post else '' }}</textarea>

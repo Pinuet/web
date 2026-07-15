@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS posts (
   title VARCHAR(200) NOT NULL,                -- 제목
   author VARCHAR(50) NOT NULL DEFAULT '익명', -- 작성자, 안 적으면 익명으로 저장됨
   content TEXT NOT NULL,                      -- 본문. 길게 쓸 수도 있어서 TEXT로 잡음
+  password_hash VARCHAR(255) NOT NULL,        -- 수정/삭제할 때 확인하는 비밀번호 (해시로 저장, 평문 저장 X)
   views INT NOT NULL DEFAULT 0,               -- 조회수. 글 볼 때마다 1씩 늘어남
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,                            -- 작성일
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- 수정일, 수정하면 자동으로 갱신됨

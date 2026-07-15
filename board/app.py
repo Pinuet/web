@@ -17,7 +17,8 @@ DB 관련해서는 과제 조건 때문에 이렇게 만들었습니다.
 """
 import os
 
-from flask import Flask, abort, redirect, render_template, request, send_from_directory, url_for
+from flask import Flask, abort, flash, redirect, render_template, request, send_from_directory, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import get_connection
 
@@ -81,21 +82,28 @@ def new_post():
     title = request.form.get("title", "").strip()
     author = request.form.get("author", "").strip() or "익명"
     content = request.form.get("content", "").strip()
+    password = request.form.get("password", "")
 
-    # 제목이나 내용이 비어있으면 저장하지 않고 입력했던 값 그대로 다시 보여줍니다.
-    if not title or not content:
+    # 제목, 내용, 비밀번호 중 하나라도 비어있으면 저장하지 않고 다시 보여줍니다.
+    # 비밀번호는 나중에 이 글을 수정/삭제할 때 본인 확인용으로 씁니다.
+    if not title or not content or not password:
         return render_template(
             "write.html",
             post={"title": title, "author": author, "content": content},
-            error="제목과 내용을 모두 입력해주세요.",
+            error="제목, 내용, 비밀번호를 모두 입력해주세요.",
         )
+
+    # 비밀번호를 그대로 저장하면 DB가 털렸을 때 바로 보이니까, 해시로 바꿔서 저장합니다.
+    # method 안 적고 그냥 generate_password_hash(password)만 쓰니까 실행할 때 에러가 나서,
+    # 검색해보니 method="pbkdf2:sha256"을 붙이면 된다고 해서 이렇게 했습니다.
+    password_hash = generate_password_hash(password, method="pbkdf2:sha256")
 
     conn = get_connection()
     try:
         with conn.cursor() as cur:
             cur.execute(
-                "INSERT INTO posts (title, author, content) VALUES (%s, %s, %s)",
-                (title, author, content),
+                "INSERT INTO posts (title, author, content, password_hash) VALUES (%s, %s, %s, %s)",
+                (title, author, content, password_hash),
             )
             new_id = cur.lastrowid  # 방금 저장한 글의 id. 상세페이지로 넘어갈 때 씁니다.
         conn.commit()
@@ -138,18 +146,35 @@ def edit_post(post_id):
             abort(404)
 
         if request.method == "GET":
-            return render_template("write.html", post=post, editing=True)
+            # 수정 버튼을 누르면 view.html에서 비밀번호를 먼저 물어보고,
+            # 그 비밀번호를 ?pw=로 붙여서 여기로 넘어옵니다. 여기서 한 번 더 확인해서
+            # 틀렸으면 수정 화면 자체를 보여주지 않습니다.
+            pw = request.args.get("pw", "")
+            if not check_password_hash(post["password_hash"], pw):
+                flash("비밀번호가 일치하지 않습니다.")
+                return redirect(url_for("view_post", post_id=post_id))
+            return render_template("write.html", post=post, editing=True, password=pw)
 
         title = request.form.get("title", "").strip()
         author = request.form.get("author", "").strip() or "익명"
         content = request.form.get("content", "").strip()
+        password = request.form.get("password", "")
 
-        if not title or not content:
+        if not title or not content or not password:
             return render_template(
                 "write.html",
                 post={"id": post_id, "title": title, "author": author, "content": content},
                 editing=True,
-                error="제목과 내용을 모두 입력해주세요.",
+                error="제목, 내용, 비밀번호를 모두 입력해주세요.",
+            )
+
+        # 글 쓸 때 저장해둔 해시랑 지금 입력한 비밀번호가 맞는지 확인합니다.
+        if not check_password_hash(post["password_hash"], password):
+            return render_template(
+                "write.html",
+                post={"id": post_id, "title": title, "author": author, "content": content},
+                editing=True,
+                error="비밀번호가 일치하지 않습니다.",
             )
 
         with conn.cursor() as cur:
@@ -165,11 +190,24 @@ def edit_post(post_id):
 
 
 # 글 삭제. 삭제 버튼을 누르면 view.html에서 confirm 창을 한 번 띄운 다음에
-# 여기로 요청이 옵니다. 실수로 잘못 누르는 걸 막으려고 넣었습니다.
+# 여기로 요청이 옵니다. 비밀번호가 맞아야 실제로 지워집니다.
 @app.route("/board/posts/<int:post_id>/delete", methods=["POST"])
 def delete_post(post_id):
+    password = request.form.get("password", "")
+
     conn = get_connection()
     try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT password_hash FROM posts WHERE id = %s", (post_id,))
+            post = cur.fetchone()
+
+        if post is None:
+            abort(404)
+
+        if not check_password_hash(post["password_hash"], password):
+            flash("비밀번호가 일치하지 않습니다.")
+            return redirect(url_for("view_post", post_id=post_id))
+
         with conn.cursor() as cur:
             cur.execute("DELETE FROM posts WHERE id = %s", (post_id,))
         conn.commit()

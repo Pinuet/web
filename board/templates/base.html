@@ -26,6 +26,12 @@
   </nav>
 
   <main class="board-main">
+    <!-- 비밀번호 틀렸을 때 같은 에러 메시지를 여기서 한 번에 보여줍니다 (delete_post에서 씀) -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <p class="form-error">{{ messages[0] }}</p>
+      {% endif %}
+    {% endwith %}
     {% block content %}{% endblock %}
   </main>
 </body>
